@@ -1,4 +1,4 @@
-package com.abn.amro.common.navigation
+package com.abn.amro.core.common.navigation
 
 interface NavigationDestination {
     val route: String

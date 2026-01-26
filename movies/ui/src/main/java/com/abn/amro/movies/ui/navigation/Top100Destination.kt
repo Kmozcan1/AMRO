@@ -1,6 +1,6 @@
 package com.abn.amro.movies.ui.navigation
 
-import com.abn.amro.common.navigation.NavigationDestination
+import com.abn.amro.core.common.navigation.NavigationDestination
 
 object Top100Destination : NavigationDestination {
     override val route = "top100_route"
