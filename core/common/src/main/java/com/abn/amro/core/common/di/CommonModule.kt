@@ -25,10 +25,4 @@ object CommonModule {
     @Provides
     @DefaultDispatcher
     fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-
-    @Provides
-    @TmdbImageBaseUrl
-    fun provideTmdbImageBaseUrl(): String {
-        return BuildConfig.TMDB_IMAGE_BASE_URL
-    }
 }

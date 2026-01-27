@@ -19,8 +19,6 @@ android {
             "TMDB_API_KEY",
             "\"${project.findProperty("TMDB_API_KEY") ?: ""}\""
         )
-        buildConfigField("String", "TMDB_BASE_URL", "\"https://api.themoviedb.org/3/\"")
-        buildConfigField("String", "TMDB_IMAGE_BASE_URL", "\"https://image.tmdb.org/t/p/w500/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

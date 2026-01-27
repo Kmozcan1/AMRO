@@ -14,17 +14,6 @@ import com.abn.amro.movies.ui.feature.detail.presentation.DetailUiEffect
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailUiEvent
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailViewModel
 import com.abn.amro.movies.ui.feature.detail.view.DetailScreen
-import com.abn.amro.movies.ui.navigation.MovieDetailDestination
-
-fun NavGraphBuilder.movieDetailScreen(
-    onNavigateBack: () -> Unit
-) {
-    composable(
-        route = MovieDetailDestination.route,
-    ) {
-        DetailRoute(onNavigateBack = onNavigateBack)
-    }
-}
 
 @Composable
 fun DetailRoute(

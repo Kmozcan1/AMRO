@@ -17,8 +17,3 @@ data class MovieDetail(
     val runtime: Int,
     val releaseDate: String?
 )
-
-val MovieDetail.imdbUrl: String?
-    get() = imdbId?.let { "$IMDB_BASE_URL$it" }
-
-private const val IMDB_BASE_URL = "https://www.imdb.com/title/"

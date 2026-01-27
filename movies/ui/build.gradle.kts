@@ -34,6 +34,13 @@ android {
     buildFeatures {
         compose = true
     }
+    
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -41,9 +48,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.compose.material.icons.extended)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
@@ -69,4 +73,7 @@ dependencies {
     implementation(projects.core.ui)
     api(projects.core.common)
     implementation(projects.movies.domain)
+
+    // Test
+    testImplementation(projects.core.testing)
 }

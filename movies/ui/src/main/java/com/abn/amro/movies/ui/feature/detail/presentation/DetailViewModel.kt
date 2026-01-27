@@ -3,11 +3,10 @@ package com.abn.amro.movies.ui.feature.detail.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abn.amro.core.common.di.TmdbImageBaseUrl
 import com.abn.amro.core.common.mapper.toAmroError
 import com.abn.amro.core.common.result.AmroResult
 import com.abn.amro.movies.domain.repository.MovieRepository
-import com.abn.amro.movies.ui.mapper.toDetailUiModel
+import com.abn.amro.movies.ui.feature.detail.mapper.MovieDetailUiMapper
 import com.abn.amro.movies.ui.navigation.MovieDetailDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,12 +23,13 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: MovieRepository,
-    @param:TmdbImageBaseUrl private val imageBaseUrl: String
+    private val mapper: MovieDetailUiMapper
 ) : ViewModel() {
 
-    private val movieId: Long = checkNotNull(
-        savedStateHandle[MovieDetailDestination.ARG_MOVIE_ID]
-    ) { "Movie ID is required for Detail Screen" }.toString().toLong()
+    private val movieId: Long =
+        savedStateHandle.get<String>(MovieDetailDestination.ARG_MOVIE_ID)?.toLongOrNull()
+            ?: savedStateHandle.get<Long>(MovieDetailDestination.ARG_MOVIE_ID)
+            ?: error("Movie ID is required for Detail Screen")
 
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
@@ -37,37 +37,48 @@ class DetailViewModel @Inject constructor(
     private val _effects = Channel<DetailUiEffect>(Channel.BUFFERED)
     val effects: Flow<DetailUiEffect> = _effects.receiveAsFlow()
 
+    private var loadJob: kotlinx.coroutines.Job? = null
+
     init {
         loadMovie()
     }
 
     fun onEvent(event: DetailUiEvent) {
         when (event) {
-            DetailUiEvent.OnBackClicked -> _effects.trySend(DetailUiEffect.NavigateBack)
-            DetailUiEvent.OnRetry -> loadMovie()
+            DetailUiEvent.OnBackClicked ->
+                _effects.trySend(DetailUiEffect.NavigateBack)
+
+            DetailUiEvent.OnRetry ->
+                loadMovie()
+
             DetailUiEvent.OnImdbClicked -> {
-                val state = _uiState.value
-                if (state is DetailUiState.Success && state.movie.imdbUrl != null) {
-                    _effects.trySend(DetailUiEffect.OpenUrl(state.movie.imdbUrl))
+                val movie = (uiState.value as? DetailUiState.Success)?.movie
+                val url = movie?.imdbUrl
+                if (!url.isNullOrBlank()) {
+                    _effects.trySend(DetailUiEffect.OpenUrl(url))
                 }
             }
         }
     }
 
     private fun loadMovie() {
-        viewModelScope.launch {
+        loadJob?.cancel()
+
+        loadJob = viewModelScope.launch {
             _uiState.update { DetailUiState.Loading }
-            
+
             repository.getMovieDetails(movieId).collect { result ->
                 when (result) {
-                    is AmroResult.Loading -> _uiState.update { DetailUiState.Loading }
+                    is AmroResult.Loading ->
+                        _uiState.update { DetailUiState.Loading }
+
                     is AmroResult.Success -> {
-                        val uiModel = result.data.toDetailUiModel(imageBaseUrl)
+                        val uiModel = mapper.map(result.data)
                         _uiState.update { DetailUiState.Success(uiModel) }
                     }
-                    is AmroResult.Error -> {
+
+                    is AmroResult.Error ->
                         _uiState.update { DetailUiState.Error(result.exception.toAmroError()) }
-                    }
                 }
             }
         }

@@ -30,6 +30,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -51,4 +57,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.common)
     implementation(projects.movies.domain)
+
+    // Test
+    testImplementation(projects.core.testing)
 }

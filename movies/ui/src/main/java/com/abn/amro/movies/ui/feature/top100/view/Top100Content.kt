@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.abn.amro.core.ui.asString
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.ui.feature.top100.presentation.SortOrder
 import com.abn.amro.movies.ui.feature.top100.presentation.SortType
@@ -209,7 +210,7 @@ fun MovieItem(movie: MovieUiModel, onClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                movie.releaseDate?.let {
+                movie.releaseDate?.asString()?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.labelMedium,
@@ -220,7 +221,7 @@ fun MovieItem(movie: MovieUiModel, onClick: () -> Unit) {
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = "★ ${movie.voteAverage}",
+                    text = "★ ${movie.voteAverage.asString()}",
                     style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .background(

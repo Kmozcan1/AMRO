@@ -1,5 +1,6 @@
 package com.abn.amro.core.network.di
 
+import com.abn.amro.core.common.TmdbConfig
 import com.abn.amro.core.network.BuildConfig
 import com.abn.amro.core.network.interceptor.AuthInterceptor
 import dagger.Module
@@ -47,7 +48,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.TMDB_BASE_URL)
+            .baseUrl(TmdbConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

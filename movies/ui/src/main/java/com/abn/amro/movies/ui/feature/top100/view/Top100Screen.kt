@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.abn.amro.core.common.model.AmroError
+import com.abn.amro.core.ui.UiText
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.ui.R
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100SortConfig
@@ -60,8 +61,8 @@ private fun Top100ScreenPreview() {
             title = "The Batman",
             overview = "Edgy millionaire cosplays as a flying mammal.",
             posterUrl = "https://image.tmdb.org/t/p/w500/path.jpg",
-            releaseDate = "2022-03-01",
-            voteAverage = "8.5",
+            releaseDate = UiText.LocalizedDateIso("2022-03-01"),
+            voteAverage = UiText.LocalizedDecimal(8.5),
             genreIds = listOf(1),
         )
     )

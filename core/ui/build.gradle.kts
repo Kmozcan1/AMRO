@@ -34,6 +34,13 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -49,4 +56,7 @@ dependencies {
 
     // Needed for date formatting to work on API below 26
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    // Test
+    testImplementation(projects.core.testing)
 }

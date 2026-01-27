@@ -1,4 +1,4 @@
-package com.abn.amro.movies.data
+package com.abn.amro.core.testing
 
 import org.junit.Test
 

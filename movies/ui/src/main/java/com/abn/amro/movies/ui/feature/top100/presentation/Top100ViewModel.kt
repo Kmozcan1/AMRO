@@ -2,13 +2,12 @@ package com.abn.amro.movies.ui.feature.top100.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abn.amro.core.common.di.TmdbImageBaseUrl
 import com.abn.amro.core.common.mapper.toAmroError
 import com.abn.amro.core.common.model.AmroError
 import com.abn.amro.core.common.result.AmroResult
 import com.abn.amro.movies.domain.model.Movie
 import com.abn.amro.movies.domain.repository.MovieRepository
-import com.abn.amro.movies.ui.mapper.toUiModel
+import com.abn.amro.movies.ui.feature.top100.mapper.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
@@ -29,7 +28,6 @@ import kotlin.comparisons.compareBy
 @HiltViewModel
 class Top100ViewModel @Inject constructor(
     private val repository: MovieRepository,
-    @param:TmdbImageBaseUrl private val imageBaseUrl: String
 ) : ViewModel() {
     private val _selectedGenreId = MutableStateFlow<Int?>(null)
     private val _sortConfig = MutableStateFlow(Top100SortConfig())
@@ -72,7 +70,7 @@ class Top100ViewModel @Inject constructor(
                     val sortedMovies = sortMovies(filteredMovies, sortConfig)
 
                     Top100UiState.Success(
-                        movies = sortedMovies.map { it.toUiModel(imageBaseUrl = imageBaseUrl) },
+                        movies = sortedMovies.map { it.toUiModel() },
                         availableGenres = genres,
                         selectedGenreId = selectedGenreId,
                         sortConfig = sortConfig

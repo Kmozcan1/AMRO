@@ -13,7 +13,7 @@ sealed interface AmroResult<out T> {
 
 fun <T> Flow<T>.asResult(): Flow<AmroResult<T>> {
     return this
-        .map<T, AmroResult<T>> { AmroResult.Success<T>(data = it) }
+        .map<T, AmroResult<T>> { AmroResult.Success(data = it) }
         .onStart { emit(value = AmroResult.Loading) }
         .catch { emit(value = AmroResult.Error(exception = it)) }
 }

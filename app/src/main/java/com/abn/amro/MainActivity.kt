@@ -13,13 +13,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.abn.amro.core.ui.theme.AMROTheme
-import com.abn.amro.movies.ui.feature.detail.navigation.movieDetailScreen
 import com.abn.amro.movies.ui.navigation.Top100Destination
 import com.abn.amro.movies.ui.feature.top100.navigation.top100Screen
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100UiState
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100ViewModel
 import com.abn.amro.movies.ui.navigation.MovieDetailDestination
 import dagger.hilt.android.AndroidEntryPoint
+import movieDetailScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
