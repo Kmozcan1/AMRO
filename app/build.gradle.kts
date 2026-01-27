@@ -31,6 +31,8 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -58,10 +60,14 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.core.splashscreen)
 
+    // Needed for date formatting to work on API below 26
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
+    implementation(projects.core.ui)
     implementation(projects.movies.ui)
     implementation(projects.movies.data)
 }

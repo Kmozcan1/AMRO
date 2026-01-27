@@ -7,10 +7,16 @@
     <string name="top100_title">Top Movies</string>
     <string name="retry_button">Retry</string>
 
-    <!-- Sort Options -->
     <string name="sort_popularity">Popularity</string>
     <string name="sort_title">Title</string>
     <string name="sort_release_date">Release Date</string>
     <string name="sort_ascending">Ascending</string>
     <string name="sort_descending">Descending</string>
+
+    <string name="unknown">Unknown</string>
+    <string name="runtime_format">%1$dh %2$dm</string> <string name="runtime_format_minutes">%1$dm</string>
+    <plurals name="votes_count">
+        <item quantity="one">%s vote</item>
+        <item quantity="other">%s votes</item>
+    </plurals>
 </resources>
