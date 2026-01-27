@@ -7,7 +7,7 @@ import com.abn.amro.movies.domain.model.MovieDetail
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
-    fun getTrendingMovies(): Flow<AmroResult<List<Movie>>>
+    fun getTop100Movies(): Flow<AmroResult<List<Movie>>>
 
     fun getMovieDetails(movieId: Long): Flow<AmroResult<MovieDetail>>
 

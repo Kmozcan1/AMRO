@@ -10,6 +10,7 @@ data class MovieDto(
     @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("release_date") val releaseDate: String?,
     @SerializedName("vote_average") val voteAverage: Double?,
+    @SerializedName("vote_count") val voteCount: Int?,
     @SerializedName("popularity") val popularity: Double?,
     @SerializedName("genre_ids") val genreIds: List<Int>?
 )
