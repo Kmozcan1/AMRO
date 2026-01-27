@@ -1,5 +1,6 @@
 package com.abn.amro.movies.data.mapper
 
+import com.abn.amro.core.network.BuildConfig
 import com.abn.amro.movies.data.remote.model.GenreDto
 import com.abn.amro.movies.data.remote.response.MovieDetailResponse
 import com.abn.amro.movies.domain.model.Genre
@@ -11,8 +12,8 @@ fun MovieDetailResponse.toDomain(): MovieDetail {
         title = title.orEmpty(),
         tagline = tagline,
         overview = overview.orEmpty(),
-        posterPath = posterPath,
-        backdropPath = backdropPath,
+        posterPath = posterPath?.let { "${BuildConfig.TMDB_IMAGE_BASE_URL}$it" },
+        backdropPath = backdropPath?.let { "${BuildConfig.TMDB_IMAGE_BASE_URL}$it" },
         genres = genres?.map { it.toDomain() } ?: emptyList(),
         voteAverage = voteAverage ?: 0.0,
         voteCount = voteCount ?: 0,

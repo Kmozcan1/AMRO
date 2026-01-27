@@ -1,5 +1,6 @@
 package com.abn.amro.core.common.di
 
+import com.abn.amro.core.common.BuildConfig
 import com.abn.amro.core.common.dispatcher.DefaultDispatcher
 import com.abn.amro.core.common.dispatcher.IoDispatcher
 import com.abn.amro.core.common.dispatcher.MainDispatcher
@@ -13,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 @Module
 @InstallIn(SingletonComponent::class)
 object CommonModule {
-
     @Provides
     @IoDispatcher
     fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
@@ -25,4 +25,10 @@ object CommonModule {
     @Provides
     @DefaultDispatcher
     fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    @TmdbImageBaseUrl
+    fun provideTmdbImageBaseUrl(): String {
+        return BuildConfig.TMDB_IMAGE_BASE_URL
+    }
 }

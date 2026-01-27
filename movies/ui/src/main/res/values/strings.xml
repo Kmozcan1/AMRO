@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_movies_found">No movies found</string>
+    <string name="error_network">Network Error</string>
+    <string name="error_server">Server Error</string>
+    <string name="error_generic">Error</string>
+    <string name="top100_title">Top Movies</string>
+    <string name="retry_button">Retry</string>
+
+    <!-- Sort Options -->
+    <string name="sort_popularity">Popularity</string>
+    <string name="sort_title">Title</string>
+    <string name="sort_release_date">Release Date</string>
+    <string name="sort_ascending">Ascending</string>
+    <string name="sort_descending">Descending</string>
+</resources>

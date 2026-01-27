@@ -23,7 +23,7 @@ class MovieRepositoryImpl @Inject constructor(
     @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MovieRepository {
 
-    override fun getTrendingMovies(): Flow<AmroResult<List<Movie>>> = flow {
+    override fun getTop100Movies(): Flow<AmroResult<List<Movie>>> = flow {
         val movies = coroutineScope {
             val top100Movies = (1..5).map { page ->
                 async {
@@ -38,7 +38,7 @@ class MovieRepositoryImpl @Inject constructor(
             top100Movies.awaitAll().flatten()
         }
 
-        emit(movies.map { it.toDomain() })
+        emit(movies.map { it.toDomain() }.distinctBy { it.id })
     }
         .asResult()
         .flowOn(ioDispatcher)
@@ -52,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override fun getMovieGenres(): Flow<AmroResult<List<Genre>>> = flow {
         val response = api.getMovieGenres()
-        emit(response.genres.map { it.toDomain() })
+        emit(response.genres.map { it.toDomain() }.distinctBy { it.id })
     }
         .asResult()
         .flowOn(ioDispatcher)
