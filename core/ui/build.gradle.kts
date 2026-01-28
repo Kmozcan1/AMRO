@@ -66,5 +66,8 @@ dependencies {
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.androidx.compose.material3)
 
+    // Used for getting the "average" color of an image, to be used as a background color for other components
+    api(libs.androidx.palette.ktx)
+
     implementation(projects.core.common)
 }

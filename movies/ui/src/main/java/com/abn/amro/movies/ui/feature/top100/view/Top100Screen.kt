@@ -30,13 +30,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.abn.amro.core.ui.component.LoadingView
-import com.abn.amro.core.ui.helper.UpdateStatusBarIcons
-import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.helper.UpdateStatusBarIconsToWhite
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.theme.AmroTeal
 import com.abn.amro.movies.domain.model.Genre
@@ -74,7 +75,13 @@ fun Top100Screen(
         previousFilters.value = currentFilters
     }
 
-    val defaultAtmosphere = AmroTeal
+    val topBarColorText = Color.White
+
+    val defaultAtmosphere = remember {
+        val raw = AmroTeal
+        if (raw.luminance() > 0.1f) Color.Black.copy(alpha = 0.6f).compositeOver(raw) else raw
+    }
+
     var stickyColor by rememberSaveable(stateSaver = ColorSaver) {
         mutableStateOf(defaultAtmosphere)
     }
@@ -97,13 +104,8 @@ fun Top100Screen(
         animationSpec = tween(800),
         label = "Atmosphere"
     )
-    val topBarColor by animateColorAsState(
-        targetValue = animatedAtmosphere.contentColor(),
-        animationSpec = tween(800),
-        label = "Text"
-    )
 
-    UpdateStatusBarIcons(backgroundColor = animatedAtmosphere)
+    UpdateStatusBarIconsToWhite()
 
     Box(Modifier.fillMaxSize()) {
         Box(
@@ -112,6 +114,7 @@ fun Top100Screen(
                 .fillMaxHeight(0.65f)
                 .background(
                     Brush.verticalGradient(
+                        // Use animatedAtmosphere directly
                         0.0f to animatedAtmosphere,
                         0.25f to animatedAtmosphere,
                         1.0f to MaterialTheme.colorScheme.background
@@ -131,8 +134,8 @@ fun Top100Screen(
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
-                        titleContentColor = topBarColor,
-                        actionIconContentColor = topBarColor
+                        titleContentColor = topBarColorText,
+                        actionIconContentColor = topBarColorText
                     )
                 )
             }
@@ -151,7 +154,7 @@ fun Top100Screen(
                             sortConfig = successState.sortConfig,
                             onGenreClick = onGenreClick,
                             onSortConfigChanged = onSortConfigChanged,
-                            contentColor = topBarColor,
+                            contentColor = topBarColorText,
                             accentColor = animatedAtmosphere
                         )
 

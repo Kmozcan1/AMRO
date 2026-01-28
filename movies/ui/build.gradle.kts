@@ -63,9 +63,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Used for getting the "average" color of an image, to be used as a background color for other components
-    implementation(libs.androidx.palette.ktx)
-
     implementation(projects.core.ui)
     implementation(projects.movies.domain)
 
