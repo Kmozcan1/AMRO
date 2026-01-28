@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abn.amro.core.ui.component.AppChip
-import com.abn.amro.core.ui.fadingEdge
+import com.abn.amro.core.ui.helper.fadingEdge
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.ui.feature.top100.presentation.SortOrder
 import com.abn.amro.movies.ui.feature.top100.presentation.SortType

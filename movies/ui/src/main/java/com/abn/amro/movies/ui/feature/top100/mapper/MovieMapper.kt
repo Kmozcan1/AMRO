@@ -2,10 +2,10 @@ package com.abn.amro.movies.ui.feature.top100.mapper
 
 import com.abn.amro.core.common.helper.toTmdbUrl
 import com.abn.amro.core.common.model.TmdbImageSize
-import com.abn.amro.core.ui.UiText
+import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.movies.domain.model.Movie
 import com.abn.amro.movies.ui.R
-import com.abn.amro.movies.ui.model.MovieUiModel
+import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 
 fun Movie.toUiModel(genreMap: Map<Int, String>): MovieUiModel =
     MovieUiModel(

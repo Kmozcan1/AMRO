@@ -1,7 +1,7 @@
 package com.abn.amro.movies.ui.feature.detail.presentation
 
 import com.abn.amro.core.common.model.AmroError
-import com.abn.amro.movies.ui.model.MovieDetailUiModel
+import com.abn.amro.movies.ui.feature.detail.model.MovieDetailUiModel
 
 sealed interface DetailUiState {
     data object Loading : DetailUiState

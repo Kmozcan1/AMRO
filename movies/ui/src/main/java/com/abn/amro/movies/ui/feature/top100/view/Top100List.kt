@@ -46,11 +46,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.abn.amro.core.ui.UiText
-import com.abn.amro.core.ui.asString
 import com.abn.amro.core.ui.component.AppBadge
-import com.abn.amro.core.ui.extension.contentColor
-import com.abn.amro.movies.ui.model.MovieUiModel
+import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.model.UiText
+import com.abn.amro.core.ui.model.asString
+import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.min

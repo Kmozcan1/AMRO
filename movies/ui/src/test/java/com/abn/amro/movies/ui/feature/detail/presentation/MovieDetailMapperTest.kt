@@ -2,12 +2,12 @@ package com.abn.amro.movies.ui.feature.detail.presentation
 
 import com.abn.amro.core.common.helper.toTmdbUrl
 import com.abn.amro.core.common.model.TmdbImageSize
-import com.abn.amro.core.ui.UiText
+import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.domain.model.MovieDetail
 import com.abn.amro.movies.ui.R
 import com.abn.amro.movies.ui.feature.detail.mapper.toUiModel
-import com.abn.amro.movies.ui.model.MovieDetailUiModel
+import com.abn.amro.movies.ui.feature.detail.model.MovieDetailUiModel
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 

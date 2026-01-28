@@ -2,6 +2,8 @@ package com.abn.amro.core.ui
 
 import android.content.Context
 import android.content.res.Resources
+import com.abn.amro.core.ui.model.UiText
+import com.abn.amro.core.ui.model.resolve
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk

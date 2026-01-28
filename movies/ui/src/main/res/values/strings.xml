@@ -16,6 +16,9 @@
     <string name="unknown">Unknown</string>
     <string name="runtime_format">%1$dh %2$dm</string> <string name="runtime_format_minutes">%1$dm</string>
     <string name="refresh_button">Refresh</string>
+    <string name="revenue">Revenue</string>
+    <string name="release_date">Release Date</string>
+    <string name="budget">Budget</string>
     <plurals name="votes_count">
         <item quantity="one">%s vote</item>
         <item quantity="other">%s votes</item>

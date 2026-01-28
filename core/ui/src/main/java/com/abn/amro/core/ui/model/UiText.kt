@@ -1,4 +1,4 @@
-package com.abn.amro.core.ui
+package com.abn.amro.core.ui.model
 
 import android.content.Context
 import androidx.annotation.PluralsRes
@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import com.abn.amro.core.ui.R
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

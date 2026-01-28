@@ -9,9 +9,9 @@ enum class SortType(@param:StringRes val labelRes: Int) {
     RELEASE_DATE(R.string.sort_release_date)
 }
 
-enum class SortOrder(@param:StringRes val labelRes: Int) {
-    Ascending(labelRes = R.string.sort_ascending),
-    Descending(labelRes = R.string.sort_descending)
+enum class SortOrder() {
+    Ascending,
+    Descending
 }
 
 data class Top100SortConfig(

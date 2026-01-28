@@ -1,4 +1,4 @@
-package com.abn.amro.core.ui.extension
+package com.abn.amro.core.ui.helper
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
