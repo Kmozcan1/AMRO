@@ -101,6 +101,8 @@ Below are some guidelines to follow to have visual consistency between screens w
 
 ## Screenshots
 Left image is light mode, right image is dark mode
+
+
 <img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/91d52f40-834f-4859-b6d5-a9e464b22edb" />
 <img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/db1460d5-4f04-4c3c-be14-f6a7d81c4adb" />
 <img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/936e7708-93d9-459c-b769-a8640703035e" />
