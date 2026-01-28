@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.abn.amro.core.common.mapper.toAmroError
 import com.abn.amro.core.common.result.AmroResult
 import com.abn.amro.movies.domain.repository.MovieRepository
-import com.abn.amro.movies.ui.feature.detail.mapper.MovieDetailUiMapper
+import com.abn.amro.movies.ui.feature.detail.mapper.toUiModel
 import com.abn.amro.movies.ui.navigation.MovieDetailDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,13 +22,11 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: MovieRepository,
-    private val mapper: MovieDetailUiMapper
+    private val repository: MovieRepository
 ) : ViewModel() {
 
     private val movieId: Long =
-        savedStateHandle.get<String>(MovieDetailDestination.ARG_MOVIE_ID)?.toLongOrNull()
-            ?: savedStateHandle.get<Long>(MovieDetailDestination.ARG_MOVIE_ID)
+        savedStateHandle.get<Long>(MovieDetailDestination.ARG_MOVIE_ID)
             ?: error("Movie ID is required for Detail Screen")
 
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
@@ -69,13 +67,10 @@ class DetailViewModel @Inject constructor(
 
             repository.getMovieDetails(movieId).collect { result ->
                 when (result) {
-                    is AmroResult.Loading ->
-                        _uiState.update { DetailUiState.Loading }
+                    is AmroResult.Loading -> _uiState.update { DetailUiState.Loading }
 
-                    is AmroResult.Success -> {
-                        val uiModel = mapper.map(result.data)
-                        _uiState.update { DetailUiState.Success(uiModel) }
-                    }
+                    is AmroResult.Success ->
+                        _uiState.update { DetailUiState.Success(result.data.toUiModel()) }
 
                     is AmroResult.Error ->
                         _uiState.update { DetailUiState.Error(result.exception.toAmroError()) }

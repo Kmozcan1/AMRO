@@ -9,5 +9,6 @@ data class MovieUiModel(
     val posterUrl: String?,
     val releaseDate: UiText?,
     val voteAverage: UiText,
-    val genreIds: List<Int>
+    val voteCount: UiText,
+    val genres: List<String>
 )

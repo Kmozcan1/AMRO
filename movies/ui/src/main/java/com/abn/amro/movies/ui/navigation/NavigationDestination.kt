@@ -9,10 +9,14 @@ object Top100Destination : NavigationDestination {
 
 object MovieDetailDestination : NavigationDestination {
     const val ARG_MOVIE_ID = "movieId"
+    const val ARG_COLOR = "color"
     private const val BASE_ROUTE = "movie_detail_route"
 
-    override val route = "$BASE_ROUTE/{$ARG_MOVIE_ID}"
+    override val route = "$BASE_ROUTE/{$ARG_MOVIE_ID}?$ARG_COLOR={$ARG_COLOR}"
+
     override val title = "Movie Details"
 
-    fun createNavigationRoute(movieId: Int) = "$BASE_ROUTE/$movieId"
+    fun createNavigationRoute(movieId: Long, color: Int): String {
+        return "$BASE_ROUTE/$movieId?$ARG_COLOR=$color"
+    }
 }

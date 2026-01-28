@@ -3,7 +3,6 @@ package com.abn.amro.movies.ui.feature.top100.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abn.amro.core.common.mapper.toAmroError
-import com.abn.amro.core.common.model.AmroError
 import com.abn.amro.core.common.result.AmroResult
 import com.abn.amro.movies.domain.model.Movie
 import com.abn.amro.movies.domain.repository.MovieRepository
@@ -23,12 +22,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import kotlin.comparisons.compareBy
 
 @HiltViewModel
 class Top100ViewModel @Inject constructor(
     private val repository: MovieRepository,
 ) : ViewModel() {
+
     private val _selectedGenreId = MutableStateFlow<Int?>(null)
     private val _sortConfig = MutableStateFlow(Top100SortConfig())
 
@@ -47,52 +46,41 @@ class Top100ViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<Top100UiState> = _retryTrigger.flatMapLatest {
         combine(
-            flow = repository.getTop100Movies(),
-            flow2 = repository.getMovieGenres(),
-            flow3 = _selectedGenreId,
-            flow4 = _sortConfig
+            repository.getTop100Movies(),
+            repository.getMovieGenres(),
+            _selectedGenreId,
+            _sortConfig
         ) { moviesResult, genresResult, selectedGenreId, sortConfig ->
 
-            when {
-                moviesResult is AmroResult.Loading || genresResult is AmroResult.Loading ->
-                    Top100UiState.Loading
+            val error = (moviesResult as? AmroResult.Error)?.exception?.toAmroError()
+                ?: (genresResult as? AmroResult.Error)?.exception?.toAmroError()
 
-                moviesResult is AmroResult.Success && genresResult is AmroResult.Success -> {
-                    val allMovies = moviesResult.data
-                    val genres = genresResult.data
-
-                    val filteredMovies = if (selectedGenreId == null) {
-                        allMovies
-                    } else {
-                        allMovies.filter { it.genreIds.contains(selectedGenreId) }
-                    }
-
-                    val sortedMovies = sortMovies(filteredMovies, sortConfig)
-
-                    Top100UiState.Success(
-                        movies = sortedMovies.map { it.toUiModel() },
-                        availableGenres = genres,
-                        selectedGenreId = selectedGenreId,
-                        sortConfig = sortConfig
-                    )
-                }
-
-                moviesResult is AmroResult.Error -> {
-                    Top100UiState.Error(
-                        error = Top100UiError.Common(error = moviesResult.exception.toAmroError())
-                    )
-                }
-
-                genresResult is AmroResult.Error -> {
-                    Top100UiState.Error(
-                        error = Top100UiError.Common(error = genresResult.exception.toAmroError())
-                    )
-                }
-
-                else -> Top100UiState.Error(
-                    error = Top100UiError.Common(error = AmroError.Unknown())
-                )
+            if (error != null) {
+                return@combine Top100UiState.Error(error)
             }
+
+            if (moviesResult !is AmroResult.Success || genresResult !is AmroResult.Success) {
+                return@combine Top100UiState.Loading
+            }
+
+            val allMovies = moviesResult.data
+            val genres = genresResult.data
+            val genreMap = genres.associate { it.id to it.name }
+
+            val filteredMovies = if (selectedGenreId == null) {
+                allMovies
+            } else {
+                allMovies.filter { it.genreIds.contains(selectedGenreId) }
+            }
+
+            val sortedMovies = sortMovies(filteredMovies, sortConfig)
+
+            Top100UiState.Success(
+                movies = sortedMovies.map { it.toUiModel(genreMap) },
+                availableGenres = genres,
+                selectedGenreId = selectedGenreId,
+                sortConfig = sortConfig
+            )
         }
     }.stateIn(
         scope = viewModelScope,
@@ -107,30 +95,20 @@ class Top100ViewModel @Inject constructor(
             SortType.RELEASE_DATE -> compareBy { it.releaseDate ?: "" }
         }
 
-        return if (config.order == SortOrder.ASCENDING) {
+        return if (config.order == SortOrder.Ascending) {
             movies.sortedWith(comparator)
         } else {
             movies.sortedWith(comparator.reversed())
         }
     }
 
-
     fun onEvent(event: Top100UiEvent) {
         when (event) {
-            is Top100UiEvent.OnGenreSelected -> {
-                _selectedGenreId.update { event.genreId }
-            }
-
-            is Top100UiEvent.OnSortConfigChanged -> {
-                _sortConfig.update { event.config }
-            }
-
+            is Top100UiEvent.OnGenreSelected -> _selectedGenreId.update { event.genreId }
+            is Top100UiEvent.OnSortConfigChanged -> _sortConfig.update { event.config }
+            is Top100UiEvent.OnRetry -> _retryTrigger.tryEmit(Unit)
             is Top100UiEvent.OnMovieClicked -> {
-                _effects.trySend(Top100UiEffect.NavigateToDetail(event.movieId))
-            }
-
-            is Top100UiEvent.OnRetry -> {
-                _retryTrigger.tryEmit(Unit)
+                _effects.trySend(Top100UiEffect.NavigateToDetail(event.movieId, event.color))
             }
         }
     }

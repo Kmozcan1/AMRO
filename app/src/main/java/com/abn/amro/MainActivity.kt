@@ -13,13 +13,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.abn.amro.core.ui.theme.AMROTheme
-import com.abn.amro.movies.ui.navigation.Top100Destination
+import com.abn.amro.movies.ui.feature.detail.navigation.movieDetailScreen
 import com.abn.amro.movies.ui.feature.top100.navigation.top100Screen
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100UiState
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100ViewModel
 import com.abn.amro.movies.ui.navigation.MovieDetailDestination
+import com.abn.amro.movies.ui.navigation.Top100Destination
 import dagger.hilt.android.AndroidEntryPoint
-import movieDetailScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,9 +48,10 @@ class MainActivity : ComponentActivity() {
                         startDestination = Top100Destination.route
                     ) {
                         top100Screen(
-                            onNavigateToDetail = { movieId ->
-                                val route = MovieDetailDestination.createNavigationRoute(movieId.toInt())
-                                navController.navigate(route)
+                            onNavigateToDetail = { movieId, color ->
+                                navController.navigate(
+                                    MovieDetailDestination.createNavigationRoute(movieId, color)
+                                )
                             }
                         )
 
