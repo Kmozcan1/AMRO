@@ -50,7 +50,7 @@ import com.abn.amro.core.ui.component.AppBadge
 import com.abn.amro.core.ui.helper.contentColor
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.model.asString
-import com.abn.amro.movies.ui.model.MovieUiModel
+import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.min

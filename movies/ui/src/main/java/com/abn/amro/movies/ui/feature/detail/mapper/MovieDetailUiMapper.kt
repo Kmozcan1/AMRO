@@ -5,7 +5,7 @@ import com.abn.amro.core.common.model.TmdbImageSize
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.movies.domain.model.MovieDetail
 import com.abn.amro.movies.ui.R
-import com.abn.amro.movies.ui.model.MovieDetailUiModel
+import com.abn.amro.movies.ui.feature.detail.model.MovieDetailUiModel
 
 fun MovieDetail.toUiModel(): MovieDetailUiModel {
     val poster = posterPath?.toTmdbUrl(TmdbImageSize.POSTER_MEDIUM)

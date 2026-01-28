@@ -43,9 +43,9 @@ import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.ui.R
 import com.abn.amro.movies.ui.components.MovieEmptyView
 import com.abn.amro.movies.ui.components.MovieErrorView
+import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100SortConfig
 import com.abn.amro.movies.ui.feature.top100.presentation.Top100UiState
-import com.abn.amro.movies.ui.model.MovieUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

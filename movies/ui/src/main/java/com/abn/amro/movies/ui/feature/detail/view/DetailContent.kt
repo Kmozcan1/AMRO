@@ -1,5 +1,6 @@
 package com.abn.amro.movies.ui.feature.detail.view
 
+import android.graphics.Bitmap
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +32,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -40,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,15 +53,17 @@ import com.abn.amro.core.ui.helper.UpdateStatusBarIcons
 import com.abn.amro.core.ui.helper.contentColor
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.model.asString
-import com.abn.amro.movies.ui.model.MovieDetailUiModel
+import com.abn.amro.movies.ui.R
+import com.abn.amro.movies.ui.feature.detail.model.MovieDetailUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun DetailContent(
     movie: MovieDetailUiModel,
-    initialColor: Int? = null,
     onImdbClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    initialColor: Int? = null
 ) {
     val scope = rememberCoroutineScope()
     val startColor = if (initialColor != null && initialColor != 0) {
@@ -69,7 +71,8 @@ fun DetailContent(
     } else {
         Color(0xFF1F1F1F)
     }
-    var targetColor by remember { mutableStateOf(startColor) }
+    val targetColorState = remember { mutableStateOf(startColor) }
+    val targetColor by targetColorState
 
     val animatedBackgroundColor by animateColorAsState(
         targetValue = targetColor,
@@ -77,39 +80,66 @@ fun DetailContent(
         label = "BgMorph"
     )
 
-    // We're ok to force light status colors here since we have a dark gradient at top.
-    // Can be easily changed if desired.
-    UpdateStatusBarIcons(forceLightColor = true)
+    // We're ok to force light status colors here since we have a dark gradient at the top.
+    // Can be easily changed if desired. But make sure to apply the same change for the back button.
+    UpdateStatusBarIcons(forceLightText = true)
 
     val contentColor = animatedBackgroundColor.contentColor()
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(animatedBackgroundColor)
     ) {
-        DetailHeader(movie = movie, blendColor = animatedBackgroundColor) { bitmap ->
-            scope.launch(Dispatchers.Default) {
-                val palette = Palette.from(bitmap).generate()
-                val newColorInt = palette.dominantSwatch?.rgb ?: palette.vibrantSwatch?.rgb
-                newColorInt?.let { targetColor = Color(it) }
-            }
-        }
+        DetailHeader(
+            movie = movie,
+            blendColor = animatedBackgroundColor,
+            onLoaded = { bitmap ->
+                scope.launch(Dispatchers.Default) {
+                    val palette = Palette.from(bitmap).generate()
+                    val newColorInt = palette.dominantSwatch?.rgb ?: palette.vibrantSwatch?.rgb
+
+                    if (newColorInt != null) {
+                        targetColorState.value = Color(newColorInt)
+                    }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp)
+        )
 
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .offset(y = (-48).dp)
         ) {
-            HeroSection(movie, contentColor)
-            StatsRow(movie, contentColor)
-            BodySection(movie, contentColor)
+            HeroSection(movie = movie, textColor = contentColor)
+
+            StatsRow(
+                movie = movie,
+                textColor = contentColor,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            BodySection(
+                movie = movie,
+                textColor = contentColor,
+                modifier = Modifier.padding(top = 16.dp)
+            )
 
             if (movie.imdbUrl != null) {
-                ImdbButton(contentColor, animatedBackgroundColor, onImdbClick)
+                ImdbButton(
+                    contentColor, animatedBackgroundColor, onImdbClick,
+                    modifier = Modifier
+                        .padding(top = 32.dp)
+                        .height(56.dp)
+                        .fillMaxWidth(),
+                )
             }
-            Spacer(Modifier.height(48.dp))
         }
     }
 }
@@ -118,13 +148,10 @@ fun DetailContent(
 private fun DetailHeader(
     movie: MovieDetailUiModel,
     blendColor: Color,
-    onLoaded: (android.graphics.Bitmap) -> Unit
+    onLoaded: (Bitmap) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .height(500.dp)
-    ) {
+    Box(modifier = modifier) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(movie.backdropUrl ?: movie.posterUrl)
@@ -154,34 +181,40 @@ private fun DetailHeader(
 }
 
 @Composable
-private fun HeroSection(movie: MovieDetailUiModel, textColor: Color) {
-    Text(
-        text = movie.title,
-        style = MaterialTheme.typography.headlineLarge,
-        fontWeight = FontWeight.Black,
-        color = textColor
-    )
-    movie.tagline?.takeIf { it.isNotBlank() }?.let {
+private fun HeroSection(
+    movie: MovieDetailUiModel,
+    textColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         Text(
-            text = "“$it”",
-            modifier = Modifier.padding(top = 8.dp),
-            color = textColor.copy(alpha = 0.8f),
-            style = MaterialTheme.typography.titleMedium,
-            fontStyle = FontStyle.Italic
+            text = movie.title,
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Black,
+            color = textColor
         )
+
+        movie.tagline?.takeIf { it.isNotBlank() }?.let {
+            Text(
+                text = "“$it”",
+                modifier = Modifier.padding(top = 8.dp),
+                color = textColor.copy(alpha = 0.8f),
+                style = MaterialTheme.typography.titleMedium,
+                fontStyle = FontStyle.Italic
+            )
+        }
     }
 }
 
 @Composable
-private fun StatsRow(movie: MovieDetailUiModel, textColor: Color) {
+private fun StatsRow(movie: MovieDetailUiModel, textColor: Color, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
-            .padding(top = 24.dp)
-            .fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         movie.voteAverage?.let {
             val count = movie.voteCount?.asString() ?: "0"
+
             AppBadge(
                 text = "${it.asString()} ($count)",
                 contentColor = textColor,
@@ -207,47 +240,84 @@ private fun StatsRow(movie: MovieDetailUiModel, textColor: Color) {
 }
 
 @Composable
-private fun BodySection(movie: MovieDetailUiModel, textColor: Color) {
-    if (!movie.genres.isNullOrEmpty()) {
-        LabelText("Genres", textColor)
-        Text(
-            text = movie.genres.joinToString(" • "),
-            color = textColor,
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
+private fun BodySection(
+    movie: MovieDetailUiModel,
+    textColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        if (!movie.genres.isNullOrEmpty()) {
+            LabelText(text = "Genres", textColor = textColor)
 
-    movie.overview?.takeIf { it.isNotBlank() }?.let {
-        LabelText("Overview", textColor)
-        Text(
-            text = it,
-            modifier = Modifier.padding(top = 8.dp),
-            color = textColor,
-            style = MaterialTheme.typography.bodyLarge,
-            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.3f
-        )
-    }
+            Text(
+                text = movie.genres.joinToString(" • "),
+                color = textColor,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
 
-    HorizontalDivider(Modifier.padding(vertical = 24.dp), color = textColor.copy(alpha = 0.2f))
+        movie.overview?.takeIf { it.isNotBlank() }?.let {
+            LabelText(
+                text = "Overview",
+                textColor = textColor,
+                modifier = Modifier.padding(top = 16.dp)
+            )
 
-    movie.budget?.asString()?.let {
-        MetaRow(Icons.Default.AttachMoney, "Budget", it, textColor)
-    }
+            Text(
+                text = it,
+                modifier = Modifier.padding(top = 4.dp),
+                color = textColor,
+                style = MaterialTheme.typography.bodyLarge,
+                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.3f
+            )
+        }
 
-    movie.revenue?.asString()?.let {
-        MetaRow(Icons.Default.AttachMoney, "Revenue", it, textColor)
-    }
+        HorizontalDivider(Modifier.padding(vertical = 24.dp), color = textColor.copy(alpha = 0.2f))
 
-    movie.releaseDate?.asString()?.let {
-        MetaRow(Icons.Default.CalendarToday, "Release Date", it, textColor)
+        movie.budget?.asString()?.let {
+            MetaRow(
+                icon = Icons.Default.AttachMoney,
+                label = stringResource(R.string.budget),
+                value = it,
+                textColor = textColor,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+            )
+        }
+
+        movie.revenue?.asString()?.let {
+            MetaRow(
+                icon = Icons.Default.AttachMoney,
+                label = stringResource(R.string.revenue),
+                value = it,
+                textColor = textColor,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+            )
+        }
+
+        movie.releaseDate?.asString()?.let {
+            MetaRow(
+                icon = Icons.Default.CalendarToday,
+                label = stringResource(R.string.release_date),
+                value = it,
+                textColor = textColor,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+            )
+        }
     }
 }
 
 @Composable
-private fun LabelText(text: String, textColor: Color) {
+private fun LabelText(text: String, textColor: Color, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        modifier = Modifier.padding(top = 24.dp),
+        modifier = modifier,
         color = textColor.copy(alpha = 0.7f),
         style = MaterialTheme.typography.labelLarge
     )
@@ -258,12 +328,11 @@ private fun MetaRow(
     icon: ImageVector,
     label: String,
     value: String,
-    textColor: Color
+    textColor: Color,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
+        modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
@@ -291,13 +360,15 @@ private fun MetaRow(
 }
 
 @Composable
-private fun ImdbButton(textColor: Color, backgroundColor: Color, onClick: () -> Unit) {
+private fun ImdbButton(
+    textColor: Color,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Button(
         onClick = onClick,
-        modifier = Modifier
-            .padding(top = 32.dp)
-            .fillMaxWidth()
-            .height(56.dp),
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors(
             containerColor = textColor,
             contentColor = backgroundColor

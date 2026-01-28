@@ -9,15 +9,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun UpdateStatusBarIcons(backgroundColor: Color? = null, forceLightColor: Boolean? = null) {
+fun UpdateStatusBarIcons(backgroundColor: Color? = null, forceLightText: Boolean? = null) {
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            val isLightBackground =
-                backgroundColor?.let { it.luminance() > 0.6f } == true || forceLightColor == false
+            val useLightThemeColors =
+                backgroundColor?.let { it.luminance() > 0.6f } == true || forceLightText == false
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
-                isLightBackground
+                useLightThemeColors
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.abn.amro.movies.ui.model
+package com.abn.amro.movies.ui.feature.detail.model
 
 import com.abn.amro.core.ui.model.UiText
 

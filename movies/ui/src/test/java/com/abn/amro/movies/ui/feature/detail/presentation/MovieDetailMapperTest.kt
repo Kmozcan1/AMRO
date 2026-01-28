@@ -7,7 +7,7 @@ import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.domain.model.MovieDetail
 import com.abn.amro.movies.ui.R
 import com.abn.amro.movies.ui.feature.detail.mapper.toUiModel
-import com.abn.amro.movies.ui.model.MovieDetailUiModel
+import com.abn.amro.movies.ui.feature.detail.model.MovieDetailUiModel
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 

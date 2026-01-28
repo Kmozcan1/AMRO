@@ -26,8 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.abn.amro.core.ui.theme.AmroTeal
 
 @Composable
-fun LoadingView(modifier: Modifier = Modifier, tint: Color = AmroTeal) {
-    Box(modifier.fillMaxSize(), Alignment.Center) {
+fun LoadingView(
+    modifier: Modifier = Modifier,
+    contentAlignment: Alignment = Alignment.Center,
+    tint: Color = AmroTeal
+) {
+    Box(modifier, contentAlignment) {
         CircularProgressIndicator(color = tint)
     }
 }
@@ -37,8 +41,8 @@ fun ErrorView(
     message: String,
     buttonText: String,
     icon: ImageVector,
-    onRetry: () -> Unit = { },
     modifier: Modifier = Modifier,
+    onRetry: () -> Unit = { },
     hasButton: Boolean = true,
     tint: Color = AmroTeal
 ) {
@@ -78,7 +82,7 @@ fun ErrorView(
 @Preview(showBackground = true, heightDp = 200)
 @Composable
 private fun LoadingViewPreview() {
-    LoadingView(tint = Color.Cyan)
+    LoadingView(tint = Color.Cyan, modifier = Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true, heightDp = 400)

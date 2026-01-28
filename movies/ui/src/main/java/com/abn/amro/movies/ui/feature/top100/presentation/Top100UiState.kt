@@ -2,7 +2,7 @@ package com.abn.amro.movies.ui.feature.top100.presentation
 
 import com.abn.amro.core.common.model.AmroError
 import com.abn.amro.movies.domain.model.Genre
-import com.abn.amro.movies.ui.model.MovieUiModel
+import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 
 sealed interface Top100UiState {
     data object Loading : Top100UiState
