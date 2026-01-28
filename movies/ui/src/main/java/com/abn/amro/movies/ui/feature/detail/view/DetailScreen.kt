@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.abn.amro.core.common.model.AmroError
 import com.abn.amro.core.ui.component.LoadingView
+import com.abn.amro.core.ui.helper.UpdateStatusBarIconsToWhite
 import com.abn.amro.core.ui.theme.DarkCharcoal
 import com.abn.amro.movies.ui.components.MovieErrorView
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailUiState
@@ -32,6 +33,8 @@ fun DetailScreen(
     onImdbClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    UpdateStatusBarIconsToWhite()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -45,7 +48,7 @@ fun DetailScreen(
                 .height(120.dp)
                 .background(
                     Brush.verticalGradient(
-                        listOf(Color.Black.copy(alpha = 0.6f), Color.Transparent)
+                        listOf(Color.Black.copy(alpha = 0.3f), Color.Transparent)
                     )
                 )
         )

@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,33 +28,28 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.abn.amro.core.ui.component.AppBadge
-import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.helper.ColorHelper
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.model.asString
+import com.abn.amro.core.ui.theme.DarkCharcoal
 import com.abn.amro.movies.ui.feature.top100.model.MovieUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 @Composable
 fun Top100List(
@@ -63,28 +59,6 @@ fun Top100List(
     atmosphereColor: Color,
     onMovieClick: (Long) -> Unit
 ) {
-    val density = LocalDensity.current
-
-    val fadeThresholdPx = remember(density) { with(density) { 40.dp.toPx() } }
-    val itemHeightPx = remember(density) { with(density) { 140.dp.toPx() } }
-    val maxOverlayHeight = 80.dp
-
-    val fadeAlpha by remember {
-        derivedStateOf {
-            val offset = listState.firstVisibleItemScrollOffset
-            (offset / fadeThresholdPx).coerceIn(0f, 1f)
-        }
-    }
-
-    val dynamicOverlayHeight by remember {
-        derivedStateOf {
-            val offset = listState.firstVisibleItemScrollOffset
-            val remainingHeight = itemHeightPx - offset
-            val heightInPx = min(remainingHeight, with(density) { maxOverlayHeight.toPx() })
-            with(density) { heightInPx.coerceAtLeast(0f).toDp() }
-        }
-    }
-
     Box(Modifier.fillMaxSize()) {
         LazyColumn(
             state = listState,
@@ -105,13 +79,11 @@ fun Top100List(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(dynamicOverlayHeight)
-                .alpha(fadeAlpha)
+                .height(8.dp)
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            atmosphereColor,
-                            atmosphereColor.copy(alpha = 0.6f),
+                            atmosphereColor.copy(alpha = 0.8f),
                             Color.Transparent
                         )
                     )
@@ -128,13 +100,15 @@ private fun MovieCard(
     onClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val targetColor = cachedColor ?: Color(color = 0xFF1F1F1F)
+    val targetColor = cachedColor ?: DarkCharcoal
+    val contentColor = Color.White
+    val isDarkMode = isSystemInDarkTheme()
+
     val animatedColor by animateColorAsState(
         targetValue = targetColor,
         animationSpec = tween(500),
         label = "CardColor"
     )
-    val contentColor = animatedColor.contentColor()
 
     Card(
         modifier = Modifier
@@ -151,15 +125,19 @@ private fun MovieCard(
         Row(Modifier.fillMaxSize()) {
             PosterSection(movie.posterUrl, animatedColor) { bitmap ->
                 scope.launch(Dispatchers.Default) {
-                    val palette = Palette.from(bitmap).generate()
-                    val swatch =
-                        palette.dominantSwatch ?: palette.vibrantSwatch ?: palette.mutedSwatch
+                    scope.launch {
+                        val cinematicColor = ColorHelper.extractCinematicColor(
+                            bitmap = bitmap,
+                            isDarkMode = isDarkMode
+                        )
 
-                    swatch?.let {
-                        onColorExtracted(Color(it.rgb))
+                        cinematicColor?.let {
+                            onColorExtracted(it)
+                        }
                     }
                 }
             }
+
             MovieCardInfo(movie, contentColor)
         }
     }
@@ -190,7 +168,7 @@ private fun PosterSection(
                 .background(
                     Brush.horizontalGradient(
                         0f to Color.Transparent,
-                        0.80f to Color.Transparent,
+                        0.90f to Color.Transparent,
                         1f to blendColor
                     )
                 )
@@ -238,7 +216,6 @@ private fun RowScope.MovieCardInfo(
                 )
             }
         }
-
 
         AppBadge(
             "${movie.voteAverage.asString()} (${movie.voteCount.asString() ?: "0"})",
