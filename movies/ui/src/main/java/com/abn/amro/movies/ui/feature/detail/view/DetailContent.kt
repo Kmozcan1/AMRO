@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,12 +46,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.abn.amro.core.ui.component.AppBadge
-import com.abn.amro.core.ui.helper.UpdateStatusBarIcons
-import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.helper.ColorHelper
 import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.model.asString
 import com.abn.amro.movies.ui.R
@@ -80,11 +79,8 @@ fun DetailContent(
         label = "BgMorph"
     )
 
-    // We're ok to force light status colors here since we have a dark gradient at the top.
-    // Can be easily changed if desired. But make sure to apply the same change for the back button.
-    UpdateStatusBarIcons(allowDarkItems = false)
-
-    val contentColor = animatedBackgroundColor.contentColor()
+    val contentColor = Color.White
+    val isDarkMode = isSystemInDarkTheme()
 
     Column(
         modifier = modifier
@@ -97,11 +93,15 @@ fun DetailContent(
             blendColor = animatedBackgroundColor,
             onLoaded = { bitmap ->
                 scope.launch(Dispatchers.Default) {
-                    val palette = Palette.from(bitmap).generate()
-                    val newColorInt = palette.dominantSwatch?.rgb ?: palette.vibrantSwatch?.rgb
+                    scope.launch {
+                        val cinematicColor = ColorHelper.extractCinematicColor(
+                            bitmap = bitmap,
+                            isDarkMode = isDarkMode
+                        )
 
-                    if (newColorInt != null) {
-                        targetColorState.value = Color(newColorInt)
+                        cinematicColor?.let {
+                            targetColorState.value = it
+                        }
                     }
                 }
             },
@@ -170,7 +170,7 @@ private fun DetailHeader(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            blendColor.copy(alpha = 0.5f),
+                            blendColor.copy(alpha = 0.1f),
                             blendColor
                         ),
                         startY = 300f
