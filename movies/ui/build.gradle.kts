@@ -44,19 +44,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.compose.material.icons.extended)
 
     // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.runtime.saveable)
     debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.material3)
 
     // Navigation & Hilt
     implementation(libs.androidx.navigation.compose)
@@ -75,8 +67,10 @@ dependencies {
     implementation(libs.androidx.palette.ktx)
 
     implementation(projects.core.ui)
-    api(projects.core.common)
     implementation(projects.movies.domain)
+
+    // MainActivity needs this for navigation host
+    api(projects.core.common)
 
     // Test
     testImplementation(projects.core.testing)

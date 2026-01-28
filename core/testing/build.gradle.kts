@@ -33,8 +33,6 @@ android {
 dependencies {
     // Standard Android/Kotlin libs
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     // Using api so these are exposed to consumers of this module to be used in testing
     api(libs.junit.jupiter.api)
