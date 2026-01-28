@@ -170,7 +170,7 @@ private fun DetailHeader(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            blendColor.copy(alpha = 0.5f),
+                            blendColor.copy(alpha = 0.1f),
                             blendColor
                         ),
                         startY = 300f

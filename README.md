@@ -97,5 +97,13 @@ Below are some guidelines to follow to have visual consistency between screens w
 2. While the Top 100 screen is open, a gradient is applied to the screen. The header (part until the list) is assigned a solid color that's derived from the top item's palette. A vertical gradient is applied to the rest of the screen. The color changes dynamically as the user scroll through the list. The default color on launch is Teal, as it's similar to the color of the ABN Amro logo in the splash screen.
 3. Just before navigating from the Top 100 to the Details screen, the background "atmosphere" changes to the color of swatch derived from the clicked item's poster image. In the detail screen, the entire background switches to the dominant swatch derived from the movie's backdrop image. Poster's swatch color is carried over to the details screen while the backdrop image's palette is being calculated. These images usually have similar colors, so the transition looks smooth.
 4. A brush effect is applied to make the parts where image is near a solid color. On the list, this effect between header and the top item is removed when top item is about to change, so that the brush effect doesn't obstruct the next top item.
-5. Different swatches are used for light/dark modes, so no one goes blind.
+5. To display white text, black alpha is applied to the extracted palette colors. Different swatch and alpha strenght is used based on whether the user is in light mode or dark mode.
 
+## Screenshots
+Left image is light mode, right image is dark mode
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/91d52f40-834f-4859-b6d5-a9e464b22edb" />
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/db1460d5-4f04-4c3c-be14-f6a7d81c4adb" />
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/936e7708-93d9-459c-b769-a8640703035e" />
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/a3371e83-ceb9-40b5-a51b-d23ebbb7b631" />
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/47b928d2-5480-4186-a532-ef7f27dce461" />
+<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/179bfa84-8fff-49eb-b131-ae4b899d0d11" />

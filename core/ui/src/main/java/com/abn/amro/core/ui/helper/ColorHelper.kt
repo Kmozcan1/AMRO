@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object ColorHelper {
-
     // Applies black alpha on a color so that the white text looks better.
     suspend fun extractCinematicColor(bitmap: Bitmap, isDarkMode: Boolean): Color? =
         withContext(Dispatchers.Default) {
