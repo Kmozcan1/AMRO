@@ -10,11 +10,11 @@ enum class SortType(@param:StringRes val labelRes: Int) {
 }
 
 enum class SortOrder(@param:StringRes val labelRes: Int) {
-    ASCENDING(R.string.sort_ascending),
-    DESCENDING(R.string.sort_descending)
+    Ascending(labelRes = R.string.sort_ascending),
+    Descending(labelRes = R.string.sort_descending)
 }
 
 data class Top100SortConfig(
     val type: SortType = SortType.POPULARITY,
-    val order: SortOrder = SortOrder.DESCENDING
+    val order: SortOrder = SortOrder.Descending
 )

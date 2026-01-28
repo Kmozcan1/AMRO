@@ -7,7 +7,6 @@ import com.abn.amro.core.testing.MainDispatcherExtension
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.domain.model.MovieDetail
 import com.abn.amro.movies.domain.repository.MovieRepository
-import com.abn.amro.movies.ui.feature.detail.mapper.MovieDetailUiMapper
 import com.abn.amro.movies.ui.navigation.MovieDetailDestination
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -25,8 +24,6 @@ class DetailViewModelTest {
 
     private val repository: MovieRepository = mockk()
 
-    private val mapper = MovieDetailUiMapper()
-
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: DetailViewModel
 
@@ -35,15 +32,14 @@ class DetailViewModelTest {
     @BeforeEach
     fun setUp() {
         savedStateHandle = SavedStateHandle(
-            mapOf(MovieDetailDestination.ARG_MOVIE_ID to movieId.toString())
+            mapOf(MovieDetailDestination.ARG_MOVIE_ID to movieId)
         )
     }
 
     private fun initViewModel() {
         viewModel = DetailViewModel(
             savedStateHandle = savedStateHandle,
-            repository = repository,
-            mapper = mapper
+            repository = repository
         )
     }
 

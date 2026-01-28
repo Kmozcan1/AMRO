@@ -8,8 +8,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailUiEffect
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailUiEvent
 import com.abn.amro.movies.ui.feature.detail.presentation.DetailViewModel
@@ -17,6 +15,7 @@ import com.abn.amro.movies.ui.feature.detail.view.DetailScreen
 
 @Composable
 fun DetailRoute(
+    initialColor: Int,
     onNavigateBack: () -> Unit,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
@@ -37,6 +36,7 @@ fun DetailRoute(
 
     DetailScreen(
         state = state,
+        initialColor = initialColor,
         onBackClick = { viewModel.onEvent(DetailUiEvent.OnBackClicked) },
         onRetry = { viewModel.onEvent(DetailUiEvent.OnRetry) },
         onImdbClick = { viewModel.onEvent(DetailUiEvent.OnImdbClicked) }

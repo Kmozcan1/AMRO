@@ -5,9 +5,11 @@ import androidx.navigation.compose.composable
 import com.abn.amro.movies.ui.navigation.Top100Destination
 
 fun NavGraphBuilder.top100Screen(
-    onNavigateToDetail: (Long) -> Unit
+    onNavigateToDetail: (Long, Int) -> Unit
 ) {
     composable(route = Top100Destination.route) {
-        Top100Route(onNavigateToDetail = onNavigateToDetail)
+        Top100Route(
+            onNavigateToDetail = onNavigateToDetail
+        )
     }
 }

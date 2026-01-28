@@ -7,8 +7,8 @@ import com.abn.amro.movies.domain.model.Movie
 import com.abn.amro.movies.ui.R
 import com.abn.amro.movies.ui.model.MovieUiModel
 
-fun Movie.toUiModel(): MovieUiModel {
-    return MovieUiModel(
+fun Movie.toUiModel(genreMap: Map<Int, String>): MovieUiModel =
+    MovieUiModel(
         id = id,
         title = title,
         overview = overview,
@@ -16,6 +16,10 @@ fun Movie.toUiModel(): MovieUiModel {
         releaseDate = releaseDate?.let { UiText.LocalizedDateIso(it) }
             ?: UiText.StringResource(R.string.unknown),
         voteAverage = UiText.LocalizedDecimal(voteAverage, fractionDigits = 1),
-        genreIds = genreIds
+        voteCount = UiText.PluralResource(
+            resId = R.plurals.votes_count,
+            quantity = voteCount,
+            formatArgs = listOf(UiText.LocalizedNumber(voteCount.toLong()))
+        ),
+        genres = genreIds.mapNotNull { id -> genreMap[id] }
     )
-}

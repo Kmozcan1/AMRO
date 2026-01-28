@@ -1,6 +1,5 @@
 package com.abn.amro.core.common.di
 
-import com.abn.amro.core.common.BuildConfig
 import com.abn.amro.core.common.dispatcher.DefaultDispatcher
 import com.abn.amro.core.common.dispatcher.IoDispatcher
 import com.abn.amro.core.common.dispatcher.MainDispatcher

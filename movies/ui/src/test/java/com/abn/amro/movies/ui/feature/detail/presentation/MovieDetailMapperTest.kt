@@ -1,22 +1,20 @@
 package com.abn.amro.movies.ui.feature.detail.presentation
 
-import com.abn.amro.core.common.model.TmdbImageSize
 import com.abn.amro.core.common.helper.toTmdbUrl
+import com.abn.amro.core.common.model.TmdbImageSize
 import com.abn.amro.core.ui.UiText
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.domain.model.MovieDetail
 import com.abn.amro.movies.ui.R
-import com.abn.amro.movies.ui.feature.detail.mapper.MovieDetailUiMapper
+import com.abn.amro.movies.ui.feature.detail.mapper.toUiModel
 import com.abn.amro.movies.ui.model.MovieDetailUiModel
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
 class MovieDetailUiMapperTest {
 
-    private val mapper = MovieDetailUiMapper()
-
     @Test
-    fun `maps fields and uses correct fallback rules`() {
+    fun `maps fields and uses correct formatted UiText types`() {
         val domain = MovieDetail(
             id = 123,
             title = "Inception",
@@ -43,6 +41,7 @@ class MovieDetailUiMapperTest {
             backdropUrl = "/backdrop.jpg".toTmdbUrl(TmdbImageSize.BACKDROP_LARGE),
             genres = listOf("Sci-Fi", "Action"),
             overview = "People dream within a dream",
+
             voteAverage = UiText.LocalizedDecimal(8.8),
             voteCount = UiText.PluralResource(
                 resId = R.plurals.votes_count,
@@ -57,7 +56,7 @@ class MovieDetailUiMapperTest {
             imdbUrl = "https://www.imdb.com/title/tt1375666"
         )
 
-        val actual = mapper.map(domain)
+        val actual = domain.toUiModel()
 
         assertThat(actual).isEqualTo(expected)
     }
@@ -69,11 +68,9 @@ class MovieDetailUiMapperTest {
             backdropPath = null
         )
 
-        val actual = mapper.map(domain)
+        val actual = domain.toUiModel()
 
-        // poster uses poster size
         assertThat(actual.posterUrl).isEqualTo("/poster.jpg".toTmdbUrl(TmdbImageSize.POSTER_MEDIUM))
-        // backdrop falls back to poster path but uses backdrop size
         assertThat(actual.backdropUrl).isEqualTo("/poster.jpg".toTmdbUrl(TmdbImageSize.BACKDROP_LARGE))
     }
 
@@ -92,7 +89,7 @@ class MovieDetailUiMapperTest {
             genres = emptyList()
         )
 
-        val actual = mapper.map(domain)
+        val actual = domain.toUiModel()
 
         assertThat(actual.tagline).isNull()
         assertThat(actual.status).isNull()

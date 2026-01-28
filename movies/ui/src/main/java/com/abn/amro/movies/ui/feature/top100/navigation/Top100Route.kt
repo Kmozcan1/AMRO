@@ -12,7 +12,7 @@ import com.abn.amro.movies.ui.feature.top100.view.Top100Screen
 
 @Composable
 fun Top100Route(
-    onNavigateToDetail: (Long) -> Unit,
+    onNavigateToDetail: (Long, Int) -> Unit,
     viewModel: Top100ViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -20,8 +20,10 @@ fun Top100Route(
     LaunchedEffect(viewModel.effects) {
         viewModel.effects.collect { effect ->
             when (effect) {
-                is Top100UiEffect.NavigateToDetail -> onNavigateToDetail(effect.movieId)
-                is Top100UiEffect.ShowToast -> { }
+                is Top100UiEffect.NavigateToDetail -> onNavigateToDetail(
+                    effect.movieId,
+                    effect.color
+                )
             }
         }
     }
@@ -30,7 +32,9 @@ fun Top100Route(
         state = state,
         onRetry = { viewModel.onEvent(Top100UiEvent.OnRetry) },
         onGenreClick = { id -> viewModel.onEvent(Top100UiEvent.OnGenreSelected(id)) },
-        onMovieClick = { id -> viewModel.onEvent(Top100UiEvent.OnMovieClicked(id)) },
+        onMovieClick = { id, color ->
+            viewModel.onEvent(Top100UiEvent.OnMovieClicked(id, color))
+        },
         onSortConfigChanged = { config -> viewModel.onEvent(Top100UiEvent.OnSortConfigChanged(config)) }
     )
 }

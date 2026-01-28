@@ -4,7 +4,7 @@
     <string name="error_network">Network Error</string>
     <string name="error_server">Server Error</string>
     <string name="error_generic">Error</string>
-    <string name="top100_title">Top Movies</string>
+    <string name="top100_title">Top 100</string>
     <string name="retry_button">Retry</string>
 
     <string name="sort_popularity">Popularity</string>
@@ -15,6 +15,7 @@
 
     <string name="unknown">Unknown</string>
     <string name="runtime_format">%1$dh %2$dm</string> <string name="runtime_format_minutes">%1$dm</string>
+    <string name="refresh_button">Refresh</string>
     <plurals name="votes_count">
         <item quantity="one">%s vote</item>
         <item quantity="other">%s votes</item>
