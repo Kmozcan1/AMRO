@@ -82,7 +82,7 @@ fun DetailContent(
 
     // We're ok to force light status colors here since we have a dark gradient at the top.
     // Can be easily changed if desired. But make sure to apply the same change for the back button.
-    UpdateStatusBarIcons(forceLightText = true)
+    UpdateStatusBarIcons(allowDarkItems = false)
 
     val contentColor = animatedBackgroundColor.contentColor()
 

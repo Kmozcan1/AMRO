@@ -8,17 +8,24 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+/**
+ * Updates the System Status Bar icons (Clock, Battery, etc.) to be either Black (Dark) or White (Light).
+ */
 @Composable
-fun UpdateStatusBarIcons(backgroundColor: Color? = null, forceLightText: Boolean? = null) {
+fun UpdateStatusBarIcons(
+    backgroundColor: Color? = null,
+    allowDarkItems: Boolean? = null
+) {
     val view = LocalView.current
 
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            val useLightThemeColors =
-                backgroundColor?.let { it.luminance() > 0.6f } == true || forceLightText == false
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
-                useLightThemeColors
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            val isLightBackground = backgroundColor?.let { it.luminance() > 0.6f } ?: false
+            val areIconsDark = allowDarkItems ?: isLightBackground
+
+            insetsController.isAppearanceLightStatusBars = areIconsDark
         }
     }
 }
