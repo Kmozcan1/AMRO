@@ -1,6 +1,6 @@
 package com.abn.amro.movies.ui.model
 
-import com.abn.amro.core.ui.UiText
+import com.abn.amro.core.ui.model.UiText
 
 data class MovieDetailUiModel(
     val id: Long,

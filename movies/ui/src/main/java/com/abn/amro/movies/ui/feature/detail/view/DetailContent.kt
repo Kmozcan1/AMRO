@@ -48,10 +48,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.abn.amro.core.ui.UiText
-import com.abn.amro.core.ui.asString
 import com.abn.amro.core.ui.component.AppBadge
-import com.abn.amro.core.ui.extension.contentColor
+import com.abn.amro.core.ui.helper.UpdateStatusBarIcons
+import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.model.UiText
+import com.abn.amro.core.ui.model.asString
 import com.abn.amro.movies.ui.model.MovieDetailUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -75,6 +76,10 @@ fun DetailContent(
         animationSpec = tween(1000),
         label = "BgMorph"
     )
+
+    // We're ok to force light status colors here since we have a dark gradient at top.
+    // Can be easily changed if desired.
+    UpdateStatusBarIcons(forceLightColor = true)
 
     val contentColor = animatedBackgroundColor.contentColor()
 

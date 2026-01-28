@@ -1,4 +1,4 @@
-package com.abn.amro.core.ui
+package com.abn.amro.core.ui.helper
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent

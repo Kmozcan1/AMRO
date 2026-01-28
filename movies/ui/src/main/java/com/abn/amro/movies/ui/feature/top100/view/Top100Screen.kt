@@ -34,9 +34,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.abn.amro.core.ui.UiText
 import com.abn.amro.core.ui.component.LoadingView
-import com.abn.amro.core.ui.extension.contentColor
+import com.abn.amro.core.ui.helper.UpdateStatusBarIcons
+import com.abn.amro.core.ui.helper.contentColor
+import com.abn.amro.core.ui.model.UiText
 import com.abn.amro.core.ui.theme.AmroTeal
 import com.abn.amro.movies.domain.model.Genre
 import com.abn.amro.movies.ui.R
@@ -59,14 +60,24 @@ fun Top100Screen(
     val colorCache = remember { mutableStateMapOf<Long, Color>() }
     val successState = state as? Top100UiState.Success
 
+    val previousFilters = remember {
+        mutableStateOf(successState?.sortConfig to successState?.selectedGenreId)
+    }
+
     LaunchedEffect(successState?.sortConfig, successState?.selectedGenreId) {
-        if (successState != null) {
+        val currentFilters = successState?.sortConfig to successState?.selectedGenreId
+
+        if (successState != null && currentFilters != previousFilters.value) {
             listState.scrollToItem(0)
         }
+
+        previousFilters.value = currentFilters
     }
 
     val defaultAtmosphere = AmroTeal
-    var stickyColor by rememberSaveable(stateSaver = ColorSaver) { mutableStateOf(defaultAtmosphere) }
+    var stickyColor by rememberSaveable(stateSaver = ColorSaver) {
+        mutableStateOf(defaultAtmosphere)
+    }
 
     val currentAtmosphereColor by remember(successState) {
         derivedStateOf {
@@ -91,6 +102,8 @@ fun Top100Screen(
         animationSpec = tween(800),
         label = "Text"
     )
+
+    UpdateStatusBarIcons(backgroundColor = animatedAtmosphere)
 
     Box(Modifier.fillMaxSize()) {
         Box(

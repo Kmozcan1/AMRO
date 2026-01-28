@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -56,6 +55,7 @@ private fun DetailStateContent(
             }
             LoadingView(tint = Color(initialColor))
         }
+
         is DetailUiState.Success -> {
             DetailContent(
                 movie = state.movie,
@@ -63,6 +63,7 @@ private fun DetailStateContent(
                 onImdbClick = onImdbClick
             )
         }
+
         is DetailUiState.Error -> {
             MovieErrorView(state.error, onRetry)
         }
@@ -102,7 +103,6 @@ private fun NavigationOverlay(onBackClick: () -> Unit) {
         onClick = onBackClick,
         modifier = Modifier
             .statusBarsPadding()
-            .padding(8.dp)
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
