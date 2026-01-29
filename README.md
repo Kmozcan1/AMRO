@@ -102,10 +102,7 @@ Below are some guidelines to follow to have visual consistency between screens w
 ## Screenshots
 Left image is light mode, right image is dark mode
 
-
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/91d52f40-834f-4859-b6d5-a9e464b22edb" />
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/db1460d5-4f04-4c3c-be14-f6a7d81c4adb" />
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/936e7708-93d9-459c-b769-a8640703035e" />
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/a3371e83-ceb9-40b5-a51b-d23ebbb7b631" />
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/47b928d2-5480-4186-a532-ef7f27dce461" />
-<img width="414" height="911" alt="image" src="https://github.com/user-attachments/assets/179bfa84-8fff-49eb-b131-ae4b899d0d11" />
+<img width="380" alt="image" src="https://github.com/user-attachments/assets/cc635997-8663-4afb-87d3-cb07e42de4ec" />
+<img width="380" alt="image" src="https://github.com/user-attachments/assets/d5de5a8f-b6a6-4ed6-bba3-a3f50e373667" />
+<img width="380" alt="image" src="https://github.com/user-attachments/assets/0a0fe7cc-7652-4968-8286-1ccb2da1bc82" />
+<img width="380" alt="image" src="https://github.com/user-attachments/assets/05fe3af9-e501-4102-a917-5f966e32438c" />

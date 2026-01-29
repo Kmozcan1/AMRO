@@ -16,7 +16,7 @@ object ColorHelper {
             val swatch = if (isDarkMode) {
                 palette.dominantSwatch ?: palette.vibrantSwatch ?: palette.mutedSwatch
             } else {
-                palette.vibrantSwatch ?: palette.dominantSwatch ?: palette.mutedSwatch
+                palette.mutedSwatch ?: palette.dominantSwatch ?: palette.mutedSwatch
             }
 
             swatch?.let {
