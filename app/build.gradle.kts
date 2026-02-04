@@ -68,6 +68,5 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(projects.core.ui)
-    implementation(projects.movies.ui)
-    implementation(projects.movies.data)
+    implementation(projects.movies.feature)
 }

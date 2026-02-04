@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.abn.amro.movies.ui"
+    namespace = "com.abn.amro.movies.feature"
     compileSdk {
         version = release(36)
     }
@@ -31,43 +30,27 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildFeatures {
-        compose = true
-    }
-
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
-    }
 }
 
 dependencies {
-    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.transport.runtime)
+    implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
-    // Compose
-    implementation(libs.androidx.compose.runtime.saveable)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-
-    // Navigation & Hilt
+    // Hilt
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // Coil
-    implementation(libs.coil.compose)
-
-    // Lifecycle
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    implementation(projects.core.ui)
-    implementation(projects.movies.domain)
-
     implementation(projects.core.common)
-
-    // Test
-    testImplementation(projects.core.testing)
+    implementation(projects.movies.ui)
+    implementation(projects.movies.data)
+    implementation(projects.movies.domain)
 }
